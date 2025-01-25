@@ -47,6 +47,7 @@ if not db_uri:
 if not api_key:
     st.sidebar.warning("\U000026A0 Groq API Key is required.")
 
+# Function to configure the database
 @st.cache_resource(ttl="2h")
 def configure_db(db_uri, mysql_host=None, mysql_user=None, mysql_password=None, mysql_db=None):
     if db_uri == LOCALDB:
@@ -54,16 +55,10 @@ def configure_db(db_uri, mysql_host=None, mysql_user=None, mysql_password=None, 
         creator = lambda: sqlite3.connect(f"file:{db_filepath}?mode=ro", uri=True)
         return SQLDatabase(create_engine("sqlite:///", creator=creator))
     elif db_uri == MYSQL:
-        if not all([mysql_host, mysql_user, mysql_password, mysql_db]):
-            st.error("Incomplete MySQL details provided. Please check and retry.")
+        if not (mysql_host and mysql_user and mysql_password and mysql_db):
+            st.error("Please provide all MySQL connection details.")
             st.stop()
-        try:
-            engine = create_engine(f"mysql+mysqlconnector://{mysql_user}:{mysql_password}@{mysql_host}/{mysql_db}")
-            return SQLDatabase(engine)
-        except Exception as e:
-            st.error(f"Failed to connect to MySQL: {e}")
-            st.stop()
-
+        return SQLDatabase(create_engine(f"mysql+mysqlconnector://{mysql_user}:{mysql_password}@{mysql_host}/{mysql_db}"))
 
 # Initialize the Groq LLM model
 if api_key and db_uri:
