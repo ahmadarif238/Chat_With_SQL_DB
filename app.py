@@ -102,3 +102,7 @@ if api_key and db_uri:
             st.code(response)
 else:
     st.warning("\U0001F6AB Please provide the required database and API key details to proceed.")
+
+# Footer
+st.markdown("---")
+st.markdown("<div style='text-align: center;'>Built by Arif Ahmad Khan ❤️</div>", unsafe_allow_html=True)
