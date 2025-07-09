@@ -1,0 +1,1 @@
+An AI chatbot that connects to a live SQL database and answers natural language questions by generating and executing SQL queries. Used LangChain agents and LLMs for database schema understanding and query translation.
